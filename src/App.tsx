@@ -18,11 +18,13 @@ export default function App() {
 
   const [rigExpanded, setRigExpanded] = useState(false);
   const [thingsExpanded, setThingsExpanded] = useState(false);
+  const [thingsIownExpanded, setThingsIownExpanded] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const actionRef = useRef({ count: 0, lastReset: Date.now() });
 
   const rigContentRef = useRef<HTMLDivElement>(null);
   const thingsContentRef = useRef<HTMLDivElement>(null);
+  const thingsIownContentRef = useRef<HTMLDivElement>(null);
 
   // 1. Anti-Inspection & Anti-Spam Logic
   useEffect(() => {
@@ -114,7 +116,7 @@ export default function App() {
         ext: '.svg'
       });
     }
-  }, [rigExpanded, thingsExpanded]);
+  }, [rigExpanded, thingsExpanded, thingsIownExpanded]);
 
   // 3. Inertial Momentum Scroll Engine
   useEffect(() => {
@@ -238,6 +240,21 @@ export default function App() {
     if (!thingsExpanded) {
       setTimeout(() => {
         const toggle = document.getElementById('things-toggle');
+        if (toggle) {
+          window.scrollTo({
+            top: toggle.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      }, 300);
+    }
+  };
+
+  const handleToggleThingsIown = () => {
+    setThingsIownExpanded(!thingsIownExpanded);
+    if (!thingsIownExpanded) {
+      setTimeout(() => {
+        const toggle = document.getElementById('things-i-own-toggle');
         if (toggle) {
           window.scrollTo({
             top: toggle.offsetTop - 100,
@@ -481,6 +498,50 @@ export default function App() {
                       </svg>
                       <span style={{fontFamily: "'Outfit', sans-serif", fontSize: '0.8rem', fontWeight: 600, color: '#2EF2B3', letterSpacing: '0.02em'}}>Alight Motion</span>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Things I Own Accordion Dropdown */}
+          <div className="accordion-container" style={{marginTop: '16px'}}>
+            <button 
+              className="accordion-trigger" 
+              id="things-i-own-toggle" 
+              aria-expanded={thingsIownExpanded}
+              onClick={handleToggleThingsIown}
+            >
+              <span className="trigger-label">Things I own</span>
+              <span className="chevron">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </button>
+            
+            <div 
+              className="accordion-content" 
+              id="things-i-own-content"
+              style={{
+                maxHeight: thingsIownExpanded ? (thingsIownContentRef.current?.scrollHeight ? `${Math.min(thingsIownContentRef.current.scrollHeight, 350)}px` : '1000px') : '0px',
+                overflowY: thingsIownExpanded && (thingsIownContentRef.current?.scrollHeight ?? 0) > 350 ? 'auto' : 'hidden'
+              }}
+            >
+              <div className="accordion-inner" ref={thingsIownContentRef}>
+                {/* Domain Section */}
+                <div className="spec-section">
+                  <h4 className="spec-title">Domain</h4>
+                  <div className="spec-grid">
+                    <div className="spec-row"><span className="spec-label">URLs</span><span className="spec-val">dvx.lol , bydevill.xyz</span></div>
+                  </div>
+                </div>
+                
+                {/* Paid Games Section */}
+                <div className="spec-section">
+                  <h4 className="spec-title">Paid Games</h4>
+                  <div className="spec-grid">
+                    <div className="spec-row"><span className="spec-label">Games</span><span className="spec-val">DOOM(2016) , G.O.P.O.T.A. , Sid Meiers Starships.</span></div>
                   </div>
                 </div>
               </div>
