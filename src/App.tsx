@@ -4,6 +4,7 @@
  */
 
 import {useState, useEffect, useRef} from 'react';
+import {motion} from 'motion/react';
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
@@ -17,11 +18,80 @@ export default function App() {
 
   const [rigExpanded, setRigExpanded] = useState(false);
   const [thingsExpanded, setThingsExpanded] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
+  const actionRef = useRef({ count: 0, lastReset: Date.now() });
 
   const rigContentRef = useRef<HTMLDivElement>(null);
   const thingsContentRef = useRef<HTMLDivElement>(null);
 
-  // 1. Theme Effect
+  // 1. Anti-Inspection & Anti-Spam Logic
+  useEffect(() => {
+    // Block Right Click
+    const handleContextMenu = (e: MouseEvent) => e.preventDefault();
+    
+    // Block DevTools Shortcuts
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const isDevKey = 
+        e.keyCode === 123 || // F12
+        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || // Ctrl+Shift+I/J/C
+        (e.ctrlKey && e.keyCode === 85); // Ctrl+U (View Source)
+      
+      if (isDevKey) {
+        e.preventDefault();
+        return false;
+      }
+
+      // Check Spam
+      handleAction();
+    };
+
+    const handleAction = () => {
+      const now = Date.now();
+      if (now - actionRef.current.lastReset > 3000) {
+        actionRef.current.count = 1;
+        actionRef.current.lastReset = now;
+      } else {
+        actionRef.current.count++;
+        if (actionRef.current.count > 15 && !isLocked) {
+          setIsLocked(true);
+          setTimeout(() => {
+            setIsLocked(false);
+            actionRef.current.count = 0;
+          }, 5000);
+        }
+      }
+    };
+
+    // Anti-Refresh Logic
+    const checkRefresh = () => {
+      const refreshData = JSON.parse(localStorage.getItem('aura-refresh-check') || '{"count": 0, "time": 0}');
+      const now = Date.now();
+      
+      if (now - refreshData.time > 60000) {
+        localStorage.setItem('aura-refresh-check', JSON.stringify({ count: 1, time: now }));
+      } else {
+        const newCount = refreshData.count + 1;
+        if (newCount > 5) {
+          window.location.href = "https://www.google.com";
+          return;
+        }
+        localStorage.setItem('aura-refresh-check', JSON.stringify({ count: newCount, time: refreshData.time }));
+      }
+    };
+
+    window.addEventListener('contextmenu', handleContextMenu);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('mousedown', handleAction);
+    checkRefresh();
+
+    return () => {
+      window.removeEventListener('contextmenu', handleContextMenu);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('mousedown', handleAction);
+    };
+  }, [isLocked]);
+
+  // 2. Theme Effect
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('aura-theme', theme);
@@ -174,6 +244,21 @@ export default function App() {
 
   return (
     <>
+      {/* Anti-Spam Lockout Overlay */}
+      {isLocked && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl flex items-center justify-center text-center p-6"
+        >
+          <div className="max-w-md">
+            <h2 className="font-outfit text-3xl font-bold text-red-500 mb-4">Suspicious Activity Detected</h2>
+            <p className="text-white/70 text-lg mb-6">Your access has been temporarily suspended due to rapid interactions. Please wait a few seconds and try again.</p>
+            <div className="w-12 h-12 border-4 border-red-500/30 border-t-red-500 rounded-full animate-spin mx-auto"></div>
+          </div>
+        </motion.div>
+      )}
+
       {/* Theme Switcher Button */}
       <button 
         className="theme-toggle" 
@@ -190,7 +275,12 @@ export default function App() {
       </button>
 
       <main className="main-wrapper">
-        <div className="profile-card">
+        <motion.div 
+          className="profile-card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
           {/* Avatar Banner Glow */}
           <div className="avatar-glow"></div>
           
@@ -390,7 +480,7 @@ export default function App() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </main>
     </>
   );
