@@ -531,17 +531,35 @@ export default function App() {
               <div className="accordion-inner" ref={thingsIownContentRef}>
                 {/* Domain Section */}
                 <div className="spec-section">
-                  <h4 className="spec-title">Domain</h4>
+                  <h4 className="spec-title" style={{ color: 'var(--accent-purple)' }}>Domains</h4>
                   <div className="spec-grid">
-                    <div className="spec-row"><span className="spec-label">URLs</span><span className="spec-val">dvx.lol , bydevill.xyz</span></div>
+                    <div className="spec-row">
+                      <span className="spec-label">Primary</span>
+                      <span className="spec-val">dvx.lol</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Secondary</span>
+                      <span className="spec-val">bydevill.xyz</span>
+                    </div>
                   </div>
                 </div>
                 
                 {/* Paid Games Section */}
-                <div className="spec-section">
-                  <h4 className="spec-title">Paid Games</h4>
+                <div className="spec-section" style={{ borderBottom: 'none', paddingBottom: 0 }}>
+                  <h4 className="spec-title" style={{ color: 'var(--accent-teal)' }}>Paid Games</h4>
                   <div className="spec-grid">
-                    <div className="spec-row"><span className="spec-label">Games</span><span className="spec-val">DOOM(2016) , G.O.P.O.T.A. , Sid Meiers Starships.</span></div>
+                    <div className="spec-row">
+                      <span className="spec-label">FPS</span>
+                      <span className="spec-val">DOOM (2016)</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Indie</span>
+                      <span className="spec-val">G.O.P.O.T.A.</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Strategy</span>
+                      <span className="spec-val">Sid Meier's Starships</span>
+                    </div>
                   </div>
                 </div>
               </div>
