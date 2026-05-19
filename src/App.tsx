@@ -71,9 +71,15 @@ export default function App() {
         localStorage.setItem('aura-refresh-check', JSON.stringify({ count: 1, time: now }));
       } else {
         const newCount = refreshData.count + 1;
-        if (newCount > 5) {
+        // Thresholds:
+        // > 3 triggers the lockout popup
+        // > 7 triggers the Google redirect
+        if (newCount > 7) {
           window.location.href = "https://www.google.com";
           return;
+        }
+        if (newCount > 3) {
+          setIsLocked(true);
         }
         localStorage.setItem('aura-refresh-check', JSON.stringify({ count: newCount, time: refreshData.time }));
       }
@@ -249,12 +255,12 @@ export default function App() {
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl flex items-center justify-center text-center p-6"
+          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl flex flex-col items-center justify-center text-center p-6"
         >
-          <div className="max-w-md">
+          <div className="max-w-md flex flex-col items-center">
             <h2 className="font-outfit text-3xl font-bold text-red-500 mb-4">Suspicious Activity Detected</h2>
-            <p className="text-white/70 text-lg mb-6">Your access has been temporarily suspended due to rapid interactions. Please wait a few seconds and try again.</p>
-            <div className="w-12 h-12 border-4 border-red-500/30 border-t-red-500 rounded-full animate-spin mx-auto"></div>
+            <p className="text-white/70 text-lg mb-8">Your access has been temporarily suspended due to rapid interactions or excessive refreshing. Please wait a few seconds and try again.</p>
+            <div className="w-12 h-12 border-4 border-red-500/30 border-t-red-500 rounded-full animate-spin"></div>
           </div>
         </motion.div>
       )}
