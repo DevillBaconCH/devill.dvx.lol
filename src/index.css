@@ -1,0 +1,469 @@
+@import "tailwindcss";
+
+/* -------------------------------------------------------------
+ * AURA CSS - PREMIUM MINIMALIST CARD (HIGH PERFORMANCE ENGINE)
+ * ------------------------------------------------------------- */
+
+/* Custom CSS Properties - Theme Variables (Optimized for CPU rendering) */
+:root[data-theme="dark"] {
+    --bg-primary: hsl(230, 20%, 4%);
+    --bg-card: hsl(230, 18%, 8%);
+    --bg-inner: hsl(230, 18%, 5%);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(255, 103, 103, 0.35);
+    
+    --text-primary: hsl(0, 0%, 98%);
+    --text-secondary: hsl(215, 15%, 80%);
+    --text-muted: hsl(215, 12%, 55%);
+    
+    --accent-purple: #FF6767;
+    --accent-teal: #FF8A8A;
+    --accent-purple-glow: rgba(255, 103, 103, 0.08);
+    --accent-teal-glow: rgba(255, 138, 138, 0.06);
+    
+    --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+:root[data-theme="light"] {
+    --bg-primary: hsl(220, 20%, 95%);
+    --bg-card: hsl(220, 15%, 98%);
+    --bg-inner: hsl(220, 15%, 93%);
+    --border-color: rgba(0, 0, 0, 0.08);
+    --border-glow: rgba(255, 103, 103, 0.2);
+    
+    --text-primary: hsl(220, 35%, 15%);
+    --text-secondary: hsl(220, 15%, 35%);
+    --text-muted: hsl(220, 12%, 50%);
+    
+    --accent-purple: #FF5050;
+    --accent-teal: #FF6767;
+    --accent-purple-glow: rgba(255, 80, 80, 0.05);
+    --accent-teal-glow: rgba(255, 103, 103, 0.04);
+    
+    --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+}
+
+/* Base Styles (Restored Native System Cursor) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.5;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, .profile-name {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-purple);
+}
+
+/* Theme Switcher Button (Locked to very corner of viewport) */
+.theme-toggle {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 1000;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent-purple);
+    transform: scale(1.05);
+}
+
+.theme-toggle svg {
+    width: 18px;
+    height: 18px;
+}
+
+:root[data-theme="dark"] .sun-icon { display: block; }
+:root[data-theme="dark"] .moon-icon { display: none; }
+:root[data-theme="light"] .sun-icon { display: none; }
+:root[data-theme="light"] .moon-icon { display: block; }
+
+/* Main Wrapper & Centered Card */
+.main-wrapper {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 24px;
+    position: relative;
+    z-index: 2;
+}
+
+.profile-card {
+    width: 100%;
+    max-width: 480px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 48px 36px 36px 36px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s;
+}
+
+/* Performant Hover Pop-up Effect (Only active on hover, no frames running) */
+.profile-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-purple);
+}
+
+/* Static avatar banner glow (No continuous painting, highly performant) */
+.avatar-glow {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle, var(--accent-purple-glow) 0%, transparent 70%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Avatar */
+.avatar-wrapper {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: relative;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-teal));
+    padding: 3px;
+    transition: transform 0.2s ease-out;
+}
+
+.avatar-wrapper:hover {
+    transform: scale(1.04);
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--bg-primary);
+    object-fit: cover;
+    display: block;
+    user-select: none;
+}
+
+/* Profile Name (Static Gorgeous Gradient, 0 CPU overhead) */
+.profile-name {
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-purple) 70%, var(--accent-teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Tags */
+.profile-tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+}
+
+.tag {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 15px;
+    transition: background-color 0.2s, border-color 0.2s;
+    user-select: none;
+}
+
+.tag-purple {
+    background-color: var(--accent-purple-glow);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    color: var(--accent-purple);
+}
+
+.tag-purple:hover {
+    border-color: var(--accent-purple);
+}
+
+.tag-teal {
+    background-color: var(--accent-teal-glow);
+    border: 1px solid rgba(20, 184, 166, 0.15);
+    color: var(--accent-teal);
+}
+
+.tag-teal:hover {
+    border-color: var(--accent-teal);
+}
+
+/* Bio / Status List */
+.bio-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.bio-item {
+    width: 100%;
+    position: relative;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, border-color 0.2s, background-color 0.2s;
+    overflow: hidden;
+}
+
+:root[data-theme="light"] .bio-item {
+    background: rgba(0, 0, 0, 0.015);
+}
+
+.bio-label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: -0.01em;
+}
+
+.bio-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-purple);
+    background: var(--accent-purple-glow);
+}
+
+.bio-item:hover .bio-label {
+    color: var(--text-primary);
+}
+
+/* Accordion Component ("My Rig") */
+.accordion-container {
+    width: 100%;
+    border-top: 1px solid var(--border-color);
+    padding-top: 24px;
+    margin-top: 8px;
+}
+
+.accordion-trigger {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s, border-color 0.2s, border-radius 0.2s;
+    outline: none;
+    cursor: pointer;
+}
+
+:root[data-theme="light"] .accordion-trigger {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.accordion-trigger:hover {
+    border-color: var(--accent-purple);
+    background-color: var(--bg-inner);
+}
+
+.accordion-trigger .chevron {
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease-out;
+}
+
+.accordion-trigger .chevron svg {
+    width: 100%;
+    height: 100%;
+}
+
+.accordion-trigger[aria-expanded="true"] .chevron {
+    transform: rotate(180deg);
+    color: var(--accent-teal);
+}
+
+.accordion-trigger[aria-expanded="true"] {
+    border-radius: 16px 16px 0 0;
+    border-bottom: none;
+    background-color: var(--bg-inner);
+}
+
+/* Accordion Content Specs */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
+    background-color: var(--bg-inner);
+    border-radius: 0 0 16px 16px;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    text-align: left;
+}
+
+.accordion-trigger[aria-expanded="true"] + .accordion-content {
+    opacity: 1;
+    border-color: var(--accent-purple);
+}
+
+.accordion-inner {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-height: 500px;
+    overflow-y: auto;
+    font-family: 'JetBrains Mono', -apple-system, monospace;
+    font-size: 0.85rem;
+}
+
+/* Custom Spec Scrollbar inside Accordion */
+.accordion-inner::-webkit-scrollbar {
+    width: 4px;
+}
+.accordion-inner::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 2px;
+}
+
+.spec-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding-bottom: 20px;
+}
+
+.spec-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.spec-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent-teal);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.spec-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+
+.spec-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.spec-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 16px;
+    line-height: 1.4;
+}
+
+@media (max-width: 400px) {
+    .spec-row {
+        grid-template-columns: 1fr;
+        gap: 2px;
+    }
+}
+
+.spec-label {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.spec-val {
+    color: var(--text-primary);
+    word-break: break-word;
+}
+
+/* Responsive details */
+@media (max-width: 480px) {
+    .profile-card {
+        padding: 36px 24px 28px 24px;
+    }
+    
+    .profile-name {
+        font-size: 1.8rem;
+    }
+    
+    .accordion-inner {
+        padding: 16px;
+    }
+}
+
+/* Twemoji Sizing & Inline Alignment */
+img.emoji {
+    height: 1.25em;
+    width: 1.25em;
+    margin: 0 0.15em;
+    vertical-align: -0.2em;
+    display: inline-block;
+}

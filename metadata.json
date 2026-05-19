@@ -1,0 +1,6 @@
+{
+  "name": "Devill Profile",
+  "description": "A premium minimalist bio profile card for Devill, featuring custom rig specs, project highlights, and a momentum scroll engine.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
